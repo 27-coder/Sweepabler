@@ -10,7 +10,7 @@ Süpürücü, Windows’ta kalanlar için. Eski uygulamaları bulur, seçtikleri
 ## Neler yapıyor?
 
 - WinGet, Chocolatey, Scoop ve resmî indirme kaynaklarından oluşan katalog üzerinden güncelleme bulur.
-- Aynı anda üç yükleyiciye kadar indirir. Küçük indirmeler önce başlar; büyükler, küçük işler bitene kadar yavaşlar. Kurulumlar tek tek yapılır.
+- Doğrudan indirmelerde aynı anda üç yükleyiciye kadar indirir. Küçük indirmeler önce başlar; büyükler, küçük işler bitene kadar yavaşlar. Kurulumlar tek tek yapılır. Paket yöneticileri kendi indirmelerini yönetir.
 - Python, Anaconda ve Miniconda gibi ilişkili uygulamaları birlikte gösterir. Sürümleri ve seçimleri ayrı kalır.
 - **Korsan-aslanı!** ile seçtiğin uygulamaları güncelleme dışında tutar.
 - İndirilen yükleyicileri kontrol eder ve güncelleme geçmişini bilgisayarında saklar.
@@ -32,10 +32,10 @@ Mevcut sürüm **1.2.3-dev**. Geliştirme devam ediyor. EXE henüz imzalı olmad
 
 ## Sırada ne var?
 
-Daha fazla uygulama desteği, yedekleme, temizlik önizlemesi, dosya parçalama ve Copilot ya da Edge gibi Windows bileşenleri için seçenekler. Bunlar henüz uygulamada yok. Güncel liste [yol haritasında](ROADMAP.md).
+Daha fazla uygulama desteği, yedekleme, temizlik önizlemesi, dosya parçalama ve Copilot ya da Edge gibi Windows bileşenleri için seçenekler. Bunlar henüz uygulamada yok.
 
 ## Kaynak ve veriler
 
-Süpürücü WPF ve .NET 10 kullanır. Ayarlar, geçmiş ve indirilen dosyalar `%LOCALAPPDATA%\Supurucu` altında tutulur. Hesap ya da arka plan servisi yok. Ayrıntılar [teknik notlarda](docs/TECHNICAL.md).
+Süpürücü WPF ve .NET 10 kullanır. Ayarlar, geçmiş ve indirilen dosyalar `%LOCALAPPDATA%\Supurucu` altında tutulur. Hesap ya da arka plan servisi yok.
 
-Kaynak kod [MIT lisansıyla](LICENSE) açık. Katkılara da açık. Değişiklikler [sürüm günlüğünde](CHANGELOG.md) tutulur.
+Kaynak kod [MIT lisansıyla](LICENSE) açık. Katkılara da açık.

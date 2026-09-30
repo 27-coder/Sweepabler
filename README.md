@@ -10,7 +10,7 @@ Sweepable’r is for those of us staying on Windows. It finds outdated apps and 
 ## What it does
 
 - Finds updates through WinGet, Chocolatey, Scoop, and a catalog of official download sources.
-- Downloads up to three installers at once. Smaller downloads start first; large ones slow down while smaller jobs finish. Installation stays one app at a time.
+- Downloads up to three direct installers at once. Smaller downloads start first; large ones slow down while smaller jobs finish. Installation stays one app at a time. Package managers handle their own downloads.
 - Groups related apps, such as Python, Anaconda, and Miniconda, while keeping their versions and selections separate.
 - Keeps chosen apps out of updates through **Pirate Lover!**.
 - Checks downloaded installers and keeps a local update history.
@@ -32,10 +32,10 @@ The current release is **1.2.3-dev**. It’s still in development and the EXE is
 
 ## What’s next
 
-More supported apps, backups, cleanup previews, file shredding, and Windows options such as Copilot and Edge controls. These are plans; they aren’t part of the app yet. The [roadmap](ROADMAP.md) has the current list.
+More supported apps, backups, cleanup previews, file shredding, and Windows options such as Copilot and Edge controls. These are plans; they aren’t part of the app yet.
 
 ## Source and data
 
-Sweepable’r uses WPF and .NET 10. Settings, history, and cached downloads stay under `%LOCALAPPDATA%\Supurucu`. There’s no account or background service. More detail is in the [technical notes](docs/TECHNICAL.md).
+Sweepable’r uses WPF and .NET 10. Settings, history, and cached downloads stay under `%LOCALAPPDATA%\Supurucu`. There’s no account or background service.
 
-The source is [MIT licensed](LICENSE). Contributions are welcome. Changes are recorded in the [changelog](CHANGELOG.md).
+The source is [MIT licensed](LICENSE). Contributions are welcome.
