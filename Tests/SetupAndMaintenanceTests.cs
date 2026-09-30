@@ -107,7 +107,7 @@ internal static class SetupAndMaintenanceTests
         try { SelfMaintenanceService.ValidateExecutablePath(Path.Combine(Path.GetTempPath(), "dotnet.exe")); }
         catch (InvalidOperationException) { rejectedHost = true; }
         Check(rejectedHost, "delete/update accepted the .NET host executable");
-        Check(SelfMaintenanceService.CreateCatalog("") is null, "an empty release channel was invented");
+        Check(SelfMaintenanceService.CreateCatalog("").Repo == "Sweepabler", "legacy empty settings did not select the official release channel");
         Check(SelfMaintenanceService.CreateCatalog("owner/repo")?.Repo == "repo", "a normal release channel was rejected");
         var rejectedRepository = false;
         try { SelfMaintenanceService.CreateCatalog("owner/repo/../../another"); }

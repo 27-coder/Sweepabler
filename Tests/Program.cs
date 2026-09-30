@@ -12,6 +12,11 @@ internal static class Program
 {
     private static async Task<int> Main(string[] args)
     {
+        if (args.Contains("--self-channel-check", StringComparer.OrdinalIgnoreCase))
+        {
+            return await SelfUpdateTests.CheckLiveChannelAsync();
+        }
+
         if (args.Contains("--live-audit", StringComparer.OrdinalIgnoreCase))
         {
             return await RunLiveAuditAsync();
@@ -51,7 +56,9 @@ internal static class Program
             ("Package and self-maintenance identities reject unsafe inputs", SetupAndMaintenanceTests.IdentitiesAsync),
             ("Update/removal helpers parse with literal bounded deletion", SetupAndMaintenanceTests.HelperSyntaxAsync),
             ("Python variants group without losing individual identities", AppFamilyTests.PythonVariantsAsync),
-            ("Family headers refresh after updates and removals", AppFamilyTests.HeaderAfterRemovalAsync)
+            ("Family headers refresh after updates and removals", AppFamilyTests.HeaderAfterRemovalAsync),
+            ("Self-update finds verified development EXEs with legacy settings", SelfUpdateTests.DefaultChannelAsync),
+            ("Explicit self-update checks see fresh releases despite cached metadata", SelfUpdateTests.FreshClickAsync)
         };
 
         var failed = 0;

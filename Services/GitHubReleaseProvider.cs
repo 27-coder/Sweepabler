@@ -15,11 +15,13 @@ public sealed class GitHubReleaseProvider : IUpdateProvider
 
     private readonly HttpClient _httpClient;
     private readonly string _cacheRoot;
+    private readonly bool _refreshCache;
 
-    public GitHubReleaseProvider(HttpClient httpClient, string? cacheRoot = null)
+    public GitHubReleaseProvider(HttpClient httpClient, string? cacheRoot = null, bool refreshCache = false)
     {
         _httpClient = httpClient;
         _cacheRoot = cacheRoot ?? AppPaths.GitHubCacheRoot;
+        _refreshCache = refreshCache;
     }
 
     public async Task<ReleaseInfo> GetLatestAsync(CatalogEntry catalog, CancellationToken cancellationToken)
@@ -176,7 +178,7 @@ public sealed class GitHubReleaseProvider : IUpdateProvider
             {
                 cached = null;
             }
-            else if (now - cached.StoredUtc <= FreshCacheLifetime)
+            else if (!_refreshCache && now - cached.StoredUtc <= FreshCacheLifetime)
             {
                 return cachedDocument;
             }

@@ -11,13 +11,7 @@ internal sealed partial class SelfMaintenanceService(HttpClient httpClient)
     public async Task<SelfUpdateDownload?> PrepareUpdateAsync(string repository, IProgress<string> progress, CancellationToken cancellationToken)
     {
         var catalog = CreateCatalog(repository);
-        if (catalog is null)
-        {
-            catalog = (await new CatalogService().LoadAsync(cancellationToken)).FirstOrDefault(entry =>
-                entry.Provider.Equals("github", StringComparison.OrdinalIgnoreCase) && AppSelfIdentity.IsSelf(entry, entry.Name));
-        }
-        if (catalog is null) throw new InvalidOperationException(LocalizationService.Current.Get("SelfChannelMissing"));
-        var release = await new GitHubReleaseProvider(httpClient).GetLatestAsync(catalog, cancellationToken);
+        var release = await new GitHubReleaseProvider(httpClient, refreshCache: true).GetLatestAsync(catalog, cancellationToken);
         var current = typeof(App).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "1.0.0";
         if (VersionComparer.Compare(current, release.Version) >= 0) return null;
         if (!Sha256().IsMatch(release.Sha256) || !release.AssetName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
@@ -74,9 +68,9 @@ internal sealed partial class SelfMaintenanceService(HttpClient httpClient)
         using var helper = Process.Start(start) ?? throw new InvalidOperationException("Could not start the maintenance helper.");
     }
 
-    internal static CatalogEntry? CreateCatalog(string repository)
+    internal static CatalogEntry CreateCatalog(string repository)
     {
-        if (string.IsNullOrWhiteSpace(repository)) return null;
+        if (string.IsNullOrWhiteSpace(repository)) repository = AppSettings.DefaultUpdateRepository;
         var parts = repository.Trim().Split('/');
         if (parts.Length != 2 || parts.Any(part => !RepositoryPart().IsMatch(part) || part is "." or ".."))
             throw new InvalidOperationException("UpdateRepository must be owner/repository.");
@@ -89,7 +83,8 @@ internal sealed partial class SelfMaintenanceService(HttpClient httpClient)
             Repo = parts[1],
             AssetRegex = @"^(?:Süpürücü|Supurucu|Sweepabler|Sweepable['’]r)(?:[-_.].*)?\.exe$",
             OfficialDomains = new() { "github.com" },
-            RequireHttps = true
+            RequireHttps = true,
+            IncludePrereleases = true
         };
     }
 

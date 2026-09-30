@@ -917,11 +917,6 @@ public partial class MainWindow : Window
             }
         }
         catch (OperationCanceledException) when (_isClosing) { }
-        catch (InvalidOperationException exception) when (exception.Message == Text.Get("SelfChannelMissing"))
-        {
-            SetStatus(exception.Message);
-            FooterText.Text = exception.Message;
-        }
         catch (Exception exception) { LogAndShow(Text.Get("Error"), exception); }
         finally { EndWork(); }
         if (restart) Close();

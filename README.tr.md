@@ -3,7 +3,7 @@
 <p align="center"><strong>Windows bakımına daha az zaman. Kendi işine daha çok zaman.</strong></p>
 <p align="center">Able’r ağacının ilk dalı · Yerel Windows uygulaması · MIT lisansı</p>
 <p align="center">Türkçe · <a href="README.md">English</a></p>
-<p align="center"><a href="https://github.com/27-coder/Sweepabler/releases/tag/v1.2.2-dev">Windows x64 indir · Geliştirme ön sürümü</a> · <a href="https://github.com/27-coder/Sweepabler/actions/workflows/build.yml">Derleme kontrolleri</a></p>
+<p align="center"><a href="https://github.com/27-coder/Sweepabler/releases/tag/v1.2.3-dev">Windows x64 indir · Geliştirme ön sürümü</a> · <a href="https://github.com/27-coder/Sweepabler/actions/workflows/build.yml">Derleme kontrolleri</a></p>
 
 ## Ortamını kurmak yıllar aldı. Korumak bu kadar uğraştırmasın.
 
@@ -35,7 +35,7 @@ Bir de küçük süpürge yardımcısı var. Çalışır, söylenir, bazen bir y
 
 ## Başlamak
 
-[Windows x64 ZIP](https://github.com/27-coder/Sweepabler/releases/download/v1.2.2-dev/Sweepabler-1.2.2-dev-windows-x64.zip) dosyasını indirip çıkar ve `Süpürücü.exe` dosyasını aç; istersen aşağıdaki komutlarla derle. Taşınabilir sürüm .NET çalışma zamanını ve kataloğu içerir; yanına JSON dosyası gerekmez.
+[Windows x64 ZIP](https://github.com/27-coder/Sweepabler/releases/download/v1.2.3-dev/Sweepabler-1.2.3-dev-windows-x64.zip) dosyasını indirip çıkar ve `Süpürücü.exe` dosyasını aç; istersen aşağıdaki komutlarla derle. Taşınabilir sürüm .NET çalışma zamanını ve kataloğu içerir; yanına JSON dosyası gerekmez.
 
 1. `Süpürücü.exe` dosyasını aç ve Windows yönetici isteğini kabul et.
 2. **Turkish** veya **English** seç. Hazırlık tamamlanınca uygulama kendiliğinden açılır.
@@ -43,9 +43,9 @@ Bir de küçük süpürge yardımcısı var. Çalışır, söylenir, bazen bir y
 
 Türkçe pencere **Süpürücü**, İngilizce pencere **Sweepable’r** adını kullanır; hazır durum metni **Süpürmeye hazır!** / **Ready to Sweep!** olur. Sonradan dili değiştirmek için alt metne sağ tıkla ve **Language** seç. Dil seçimi her zaman İngilizce görünür; hazırlık seçtiğin dilde devam eder. Ana pencere 430 × 340, hazırlık penceresi 390 × 220 boyutunda kalır; dil seçimi ve hazırlık bu boyutları değiştirmez. WinGet, Git, Chocolatey ve Scoop zorunludur.
 
-**Korsan-aslanı!** yanındaki **Süpürücü’yü süpür**, yapılandırılan sürüm kaynağını kontrol eder; yeni EXE'yi doğrular, uygulama kapandıktan sonra bu taşınabilir kopyayı değiştirip yeniden açar. **Süpürücü’yü sil** onaydan sonra yalnızca çalışan taşınabilir EXE'yi kaldırır; ayarlar ve kurulu araçlar korunur. Sürüm deposu şu anda boş olduğundan kendini güncelleme düğmesi henüz kanal yapılandırılmadığını bildirir. Ayrıntılar [teknik kılavuzda](docs/TECHNICAL.md#self-update-and-removal).
+**Korsan-aslanı!** yanındaki **Süpürücü’yü süpür**, geliştirme ön sürümleri dahil [bu deponun sürümlerini](https://github.com/27-coder/Sweepabler/releases) kontrol eder; daha yeni EXE'yi doğrular, uygulama kapandıktan sonra bu taşınabilir kopyayı değiştirip yeniden açar. Her tıklama sürüm bilgisini GitHub'dan yeniler. **Süpürücü’yü sil** onaydan sonra yalnızca çalışan taşınabilir EXE'yi kaldırır; ayarlar ve kurulu araçlar korunur. Eski ayarlarda kanal boşsa resmî depo otomatik kullanılır. Ayrıntılar [teknik kılavuzda](docs/TECHNICAL.md#self-update-and-removal).
 
-Mevcut aday **1.2.2-dev**, bir [geliştirme ön sürümüdür](https://github.com/27-coder/Sweepabler/releases/tag/v1.2.2-dev). EXE henüz imzalı olmadığı için Windows SmartScreen ve UAC istemleri gösterebilir. Daha geniş yeni-PC testleri ve sonraki adımlar yol haritasında yer alır.
+Mevcut aday **1.2.3-dev**, bir [geliştirme ön sürümüdür](https://github.com/27-coder/Sweepabler/releases/tag/v1.2.3-dev). EXE henüz imzalı olmadığı için Windows SmartScreen ve UAC istemleri gösterebilir. Daha geniş yeni-PC testleri ve sonraki adımlar yol haritasında yer alır.
 
 ## Süpürge nereye uzanacak?
 

@@ -29,9 +29,11 @@ A family header appears only when at least two related results are present: for 
 
 ## Self-update and removal
 
-`settings.json` has an `UpdateRepository` field. Its default is empty because no release repository has been selected. Set it to a trusted `owner/repository` after publishing app releases. A GitHub catalog entry explicitly matching the app's own identity can also supply the channel. The app reports the missing channel without choosing a repository for the user.
+`settings.json` has an `UpdateRepository` field, defaulting to `27-coder/Sweepabler`. Missing, null, blank, or whitespace values in older settings automatically use that default. An explicit trusted `owner/repository` override is preserved.
 
-**Sweep the Sweepable’r** obtains the newest eligible GitHub release using the usual release-selection policy. A newer release must include a standalone EXE asset named `Süpürücü`, `Supurucu`, `Sweepabler`, or `Sweepable'r` (an optional version suffix is accepted), a GitHub SHA-256 asset digest, and matching app product metadata. ZIP-only releases cannot update the portable copy. Download, domain, size, and checksum checks apply before replacement.
+**Sweep the Sweepable’r** checks this repository's newest eligible GitHub release, including development pre-releases and excluding drafts. Each click revalidates release metadata with GitHub instead of relying on the 30-minute fresh-cache shortcut; rate-limit fallback still follows the existing cache policy. Other app catalog entries retain their existing pre-release and caching policies.
+
+A newer release must include a standalone EXE asset named `Süpürücü`, `Supurucu`, `Sweepabler`, or `Sweepable'r` (an optional version suffix is accepted), a GitHub SHA-256 asset digest, and matching app product metadata. ZIP-only releases cannot update the portable copy. Download, domain, size, and checksum checks apply before replacement. The button reports that the app is up to date when the eligible release is not newer.
 
 A hidden PowerShell helper waits for this process to close, rechecks paths and hashes, copies the new bytes beside the current EXE, atomically replaces it with a recovery copy, and restarts it. Immediate restart failures trigger recovery; other helper failures are logged in `self-maintenance.log`. A real release update still needs clean-PC validation after configuring the channel.
 
@@ -92,4 +94,4 @@ GitHub metadata is fresh for 30 minutes; a cache up to seven days old is a fallb
 
 The package-free regression harness covers catalog selection, package results, trust, redirects, safe paths, JSON writes, process termination, cleanup, concurrency/order, pacing release, cancellation, changed/truncated installer bytes, required-tool orchestration with simulated tools, cache reuse, and maintenance-helper syntax. It does not install tools or execute the self-removal helper.
 
-UI checks and clean-machine trials complement those tests. Local tests do not establish universal app support or complete system recovery. The development candidate is portable Windows x64 and unsigned, with self-update code but no configured release channel or full installer.
+UI checks and clean-machine trials complement those tests. Local tests do not establish universal app support or complete system recovery. The development candidate is portable Windows x64 and unsigned, with the official self-update channel configured and no full installer.

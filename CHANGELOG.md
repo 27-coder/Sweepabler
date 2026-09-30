@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.3-dev — 2026-09-30 · Development pre-release
+
+- Connected Sweep the Sweepable’r to `27-coder/Sweepabler`, including development pre-releases and checksum-verified EXE assets.
+- Migrated missing or empty saved release channels to the official repository while preserving explicit overrides.
+- Refreshed GitHub metadata on each self-update click so newly published releases are visible immediately; other catalog caching behavior stays the same.
+
 ## 1.2.2-dev — 2026-09-30 · Development pre-release
 
 - Made the language chooser and its menu English-only, with Turkish and English buttons, while preserving the fixed window sizes.

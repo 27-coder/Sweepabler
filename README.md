@@ -3,7 +3,7 @@
 <p align="center"><strong>Less Windows housekeeping. More getting on with your day.</strong></p>
 <p align="center">The first branch of the <strong>Able’r</strong> tree · Native Windows app · MIT licensed</p>
 <p align="center">English · <a href="README.tr.md">Türkçe</a></p>
-<p align="center"><a href="https://github.com/27-coder/Sweepabler/releases/tag/v1.2.2-dev">Download Windows x64 · Development pre-release</a> · <a href="https://github.com/27-coder/Sweepabler/actions/workflows/build.yml">Build checks</a></p>
+<p align="center"><a href="https://github.com/27-coder/Sweepabler/releases/tag/v1.2.3-dev">Download Windows x64 · Development pre-release</a> · <a href="https://github.com/27-coder/Sweepabler/actions/workflows/build.yml">Build checks</a></p>
 
 ## Your environment took years to build. Keep it.
 
@@ -35,7 +35,7 @@ There is also a small broom assistant. It works, complains, and occasionally los
 
 ## Get started
 
-Download the [Windows x64 ZIP](https://github.com/27-coder/Sweepabler/releases/download/v1.2.2-dev/Sweepabler-1.2.2-dev-windows-x64.zip), extract it, and open `Süpürücü.exe`, or build from source below. The portable build includes its .NET runtime and catalog, with no companion JSON file needed.
+Download the [Windows x64 ZIP](https://github.com/27-coder/Sweepabler/releases/download/v1.2.3-dev/Sweepabler-1.2.3-dev-windows-x64.zip), extract it, and open `Süpürücü.exe`, or build from source below. The portable build includes its .NET runtime and catalog, with no companion JSON file needed.
 
 1. Open `Süpürücü.exe` and accept the Windows administrator prompt.
 2. Choose **Turkish** or **English**. Setup completes and opens the app automatically.
@@ -43,9 +43,9 @@ Download the [Windows x64 ZIP](https://github.com/27-coder/Sweepabler/releases/d
 
 The English window is **Sweepable’r**; the Turkish window is **Süpürücü**, ready with **Ready to Sweep!** / **Süpürmeye hazır!**. Right-click the footer and choose **Language** to change language later. The chooser always uses English text; preparation uses your chosen language. The main window stays 430 × 340 and setup stays 390 × 220, including language selection and preparation. WinGet, Git, Chocolatey, and Scoop are required.
 
-Beside **Pirate Lover!**, **Sweep the Sweepable’r** checks the configured release source, verifies the new EXE, replaces the current portable copy after it closes, and restarts it. **Delete Sweepable’r** asks for confirmation and removes only the running portable EXE after closing; saved settings and installed tools remain. The release repository is currently empty, so self-update reports that no channel is configured. See [release configuration](docs/TECHNICAL.md#self-update-and-removal).
+Beside **Pirate Lover!**, **Sweep the Sweepable’r** checks [this repository's releases](https://github.com/27-coder/Sweepabler/releases), including development pre-releases, verifies a newer EXE, replaces the current portable copy after it closes, and restarts it. Each click refreshes release information from GitHub. **Delete Sweepable’r** asks for confirmation and removes only the running portable EXE after closing; saved settings and installed tools remain. Old saved settings with an empty channel use this official repository automatically. See [release configuration](docs/TECHNICAL.md#self-update-and-removal).
 
-The current build is **1.2.2-dev**, a [development pre-release](https://github.com/27-coder/Sweepabler/releases/tag/v1.2.2-dev). The portable EXE is unsigned, so Windows may show SmartScreen and UAC prompts. Broader clean-PC testing and the next increments remain on the roadmap.
+The current build is **1.2.3-dev**, a [development pre-release](https://github.com/27-coder/Sweepabler/releases/tag/v1.2.3-dev). The portable EXE is unsigned, so Windows may show SmartScreen and UAC prompts. Broader clean-PC testing and the next increments remain on the roadmap.
 
 ## Where the broom goes next
 
