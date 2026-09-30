@@ -1,25 +1,20 @@
-# Growing the Able’r tree
+# Roadmap
 
-Sweepable’r begins with app updates. The direction is broader Windows housekeeping, delivered in small changes people can inspect and use. Ideas here have no promised release date.
+App updates come first. The items below are still being worked out; there are no release dates yet.
 
-## Next increments
+## Near term
 
-- Validate 1.2.3 on clean Windows 10/11 x64 machines, including required-tool installation, setup retry, both app languages in the fixed window sizes, and related-app grouping.
-- Expand the catalog from real unsupported-app reports, checking official sources, scope, signing identity, and silent flags.
-- Improve visibility of download size, active transfers, and restart requirements in the compact UI.
-- Add a data-folder view and a manual preview for clearing Sweepable’r’s installer cache.
-- Validate portable self-update and removal with real release replacements on disposable copies. Design a proper installer and signed release workflow.
+- More supported apps and better matching of installed versions.
+- Clean Windows 10/11 testing for setup, language selection, and updates.
+- More testing of the app’s own update and removal buttons.
+- Clearer download progress and restart information in the existing small window.
+- A cache view, a proper installer, and signed builds.
 
-## Later branches
+## Later
 
-**Backup and recovery.** Start with explicitly selected files and app settings. Show where the backup goes, required space, and how to restore it. Whole-system imaging needs its own design and validation.
+- Backups of selected files and app settings, with restore support.
+- Cleanup previews showing what would be removed and how much space it uses.
+- File shredding, with the limits of SSDs, snapshots, and backups explained.
+- Windows component options, including Copilot and Edge, where supported and reversible.
 
-**Cleanup previews.** Inventory first. Show exact targets and estimated space before broader cleanup. Keep user data and automatic cache maintenance separate.
-
-**Secure deletion.** Explore deliberate file shredding with explicit selection and final review. Explain SSD, snapshots, and backup limitations before calling anything unrecoverable.
-
-**Windows component controls.** Research supported options for Copilot, Edge, and other components by Windows version. Show dependencies and a recovery path; do not silently remove system components.
-
-## How a branch becomes a feature
-
-A proposal should include the user problem, files or settings affected, reversal or recovery story, and evidence needed to call it ready. Keep status visible in the README and changelog. Ship useful increments rather than implying the roadmap is already implemented.
+The app currently handles selected app updates and its own old downloads. These later items haven’t shipped.

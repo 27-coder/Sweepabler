@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Shortened the English and Turkish project descriptions.
+- Removed the contribution guide and issue/pull request templates. Contributions are still welcome.
+
 ## 1.2.3-dev — 2026-09-30 · Development pre-release
 
 - Connected Sweep the Sweepable’r to `27-coder/Sweepabler`, including development pre-releases and checksum-verified EXE assets.
