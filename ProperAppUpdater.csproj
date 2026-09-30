@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>Süpürücü</AssemblyName>
+    <Product>Süpürücü</Product>
+    <ApplicationIcon>Assets\supurucu-polished.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Version>1.2.2-dev</Version>
+    <Authors>Able'r</Authors>
+    <Description>Selected app updates for Windows, in Turkish and English.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Tests\**\*.cs" />
+    <EmbeddedResource Include="catalog.json" LogicalName="catalog.json" />
+    <Resource Include="Assets\supurucu.ico" />
+    <Resource Include="Assets\supurucu-assistant-logo-pet.png" />
+    <Resource Include="Assets\supurucu-assistant-logo-pet-tip.png" />
+    <Resource Include="Assets\assistant-rig\*.png" />
+    <Resource Include="Assets\supurucu-logo.png" />
+    <Resource Include="Assets\supurucu-polished.ico" />
+    <Resource Include="Assets\supurucu-polished.png" />
+  </ItemGroup>
+
+</Project>

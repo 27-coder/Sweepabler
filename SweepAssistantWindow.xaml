@@ -1,0 +1,325 @@
+<Window x:Class="ProperAppUpdater.SweepAssistantWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Sweeping"
+        Width="190"
+        Height="154"
+        MinWidth="168"
+        MinHeight="144"
+        MaxWidth="218"
+        MaxHeight="180"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        ShowActivated="False"
+        ShowInTaskbar="False"
+        Topmost="True"
+        Background="Transparent"
+        AllowsTransparency="True"
+        Loaded="Window_Loaded"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        MouseWheel="Window_MouseWheel"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
+    <Window.ContextMenu>
+        <ContextMenu>
+            <MenuItem x:Name="SmallSizeMenuItem"
+                      Header="Small"
+                      Click="SmallSizeMenuItem_Click" />
+            <MenuItem x:Name="MediumSizeMenuItem"
+                      Header="Medium"
+                      Click="MediumSizeMenuItem_Click" />
+            <MenuItem x:Name="LargeSizeMenuItem"
+                      Header="Large"
+                      Click="LargeSizeMenuItem_Click" />
+            <Separator />
+            <MenuItem x:Name="CloseMenuItem"
+                      Header="Close"
+                      Click="CloseMenuItem_Click" />
+        </ContextMenu>
+    </Window.ContextMenu>
+
+    <Grid x:Name="AssistantRoot"
+          Width="190"
+          Height="154">
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="PetRow"
+                           Height="112" />
+            <RowDefinition x:Name="BadgeRow"
+                           Height="42" />
+        </Grid.RowDefinitions>
+        <Grid.Effect>
+            <DropShadowEffect BlurRadius="14"
+                              Direction="270"
+                              Opacity="0.22"
+                              ShadowDepth="3"
+                              Color="#000000" />
+        </Grid.Effect>
+
+        <Viewbox x:Name="PetViewbox"
+                 Grid.Row="0"
+                 Panel.ZIndex="2"
+                 Width="132"
+                 Height="112"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Top"
+                 Stretch="Uniform">
+            <Grid Width="238"
+                  Height="202"
+                  ClipToBounds="True">
+                <Grid x:Name="PetRig"
+                      Width="210"
+                      Height="176"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      RenderTransformOrigin="0.50,0.62">
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform x:Name="PetRigRotateTransform"
+                                             Angle="0" />
+                            <TranslateTransform x:Name="PetRigTranslateTransform"
+                                                X="0"
+                                                Y="0" />
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+                    <Image x:Name="FixedBodyImage"
+                           Width="210"
+                           Height="176"
+                           Source="Assets/assistant-rig/body-upper.png"
+                           Stretch="Uniform"
+                           RenderOptions.BitmapScalingMode="HighQuality" />
+
+                    <Image x:Name="SeamCoverImage"
+                           Width="210"
+                           Height="176"
+                           Source="Assets/assistant-rig/seam-cover.png"
+                           Stretch="Uniform"
+                           RenderOptions.BitmapScalingMode="HighQuality" />
+
+                    <Image x:Name="SweeperImage"
+                           Width="210"
+                           Height="176"
+                           Source="Assets/assistant-rig/sweeper-bristles.png"
+                           Stretch="Uniform"
+                           RenderTransformOrigin="0.47,0.58"
+                           RenderOptions.BitmapScalingMode="HighQuality">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform x:Name="SweeperScaleTransform"
+                                                ScaleX="1"
+                                                ScaleY="1" />
+                                <RotateTransform x:Name="SweeperRotateTransform"
+                                                 Angle="0" />
+                                <TranslateTransform x:Name="SweeperTranslateTransform"
+                                                    X="0"
+                                                    Y="0" />
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+
+                    <Canvas x:Name="FaceOverlay"
+                            Width="210"
+                            Height="176"
+                            IsHitTestVisible="False">
+                        <Canvas x:Name="CryLayer"
+                                Opacity="0">
+                            <Ellipse x:Name="CryLeftStream"
+                                     Canvas.Left="113"
+                                     Canvas.Top="80"
+                                     Width="3.2"
+                                     Height="15"
+                                     Fill="#E72EA8FF" />
+                            <Ellipse x:Name="CryRightStream"
+                                     Canvas.Left="139"
+                                     Canvas.Top="79"
+                                     Width="3.2"
+                                     Height="15.5"
+                                     Fill="#E72EA8FF" />
+                            <Ellipse x:Name="CryLeftDropA"
+                                     Canvas.Left="113.1"
+                                     Canvas.Top="91"
+                                     Width="3.8"
+                                     Height="5.8"
+                                     Fill="#F55CC2FF">
+                                <Ellipse.RenderTransform>
+                                    <TranslateTransform x:Name="CryLeftDropATransform" />
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                            <Ellipse x:Name="CryRightDropA"
+                                     Canvas.Left="138.8"
+                                     Canvas.Top="90"
+                                     Width="3.8"
+                                     Height="5.8"
+                                     Fill="#F55CC2FF">
+                                <Ellipse.RenderTransform>
+                                    <TranslateTransform x:Name="CryRightDropATransform" />
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                            <Ellipse x:Name="HardCryLeftDrop"
+                                     Canvas.Left="111.2"
+                                     Canvas.Top="88"
+                                     Width="3.8"
+                                     Height="6.2"
+                                     Fill="#F52EA8FF"
+                                     Opacity="0">
+                                <Ellipse.RenderTransform>
+                                    <TranslateTransform x:Name="HardCryLeftDropTransform" />
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                            <Ellipse x:Name="HardCryRightDrop"
+                                     Canvas.Left="141.2"
+                                     Canvas.Top="87"
+                                     Width="3.8"
+                                     Height="6.2"
+                                     Fill="#F52EA8FF"
+                                     Opacity="0">
+                                <Ellipse.RenderTransform>
+                                    <TranslateTransform x:Name="HardCryRightDropTransform" />
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                        </Canvas>
+                        <Canvas x:Name="FailureLayer"
+                                Opacity="0" />
+                    </Canvas>
+                </Grid>
+            </Grid>
+        </Viewbox>
+
+        <Border x:Name="TargetBadge"
+                Grid.Row="1"
+                Panel.ZIndex="1"
+                Width="178"
+                Height="34"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Margin="0,-23,0,0"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                BorderThickness="0"
+                Padding="2,2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="TargetCaptionText"
+                           FontFamily="Segoe UI"
+                           FontSize="9.5"
+                           FontWeight="SemiBold"
+                           Foreground="#B8D9E2F2"
+                           TextAlignment="Center"
+                           TextTrimming="CharacterEllipsis"
+                           TextWrapping="NoWrap"
+                           Visibility="Collapsed" />
+                <Grid Grid.Row="1"
+                      ClipToBounds="True">
+                    <TextBlock Text="{Binding Text, ElementName=TargetNameText}"
+                               FontFamily="Segoe UI Semibold"
+                               FontSize="{Binding FontSize, ElementName=TargetNameText}"
+                               FontWeight="Bold"
+                               Foreground="#FF000000"
+                               Opacity="0.96"
+                               TextAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               TextWrapping="NoWrap"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Stretch"
+                               Margin="-1.4,0,1.4,0" />
+                    <TextBlock Text="{Binding Text, ElementName=TargetNameText}"
+                               FontFamily="Segoe UI Semibold"
+                               FontSize="{Binding FontSize, ElementName=TargetNameText}"
+                               FontWeight="Bold"
+                               Foreground="#FF000000"
+                               Opacity="0.96"
+                               TextAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               TextWrapping="NoWrap"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Stretch"
+                               Margin="1.4,0,-1.4,0" />
+                    <TextBlock Text="{Binding Text, ElementName=TargetNameText}"
+                               FontFamily="Segoe UI Semibold"
+                               FontSize="{Binding FontSize, ElementName=TargetNameText}"
+                               FontWeight="Bold"
+                               Foreground="#FF000000"
+                               Opacity="0.96"
+                               TextAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               TextWrapping="NoWrap"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Stretch"
+                               Margin="0,-1.4,0,1.4" />
+                    <TextBlock Text="{Binding Text, ElementName=TargetNameText}"
+                               FontFamily="Segoe UI Semibold"
+                               FontSize="{Binding FontSize, ElementName=TargetNameText}"
+                               FontWeight="Bold"
+                               Foreground="#FF000000"
+                               Opacity="0.96"
+                               TextAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               TextWrapping="NoWrap"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Stretch"
+                               Margin="0,1.4,0,-1.4" />
+                    <TextBlock Text="{Binding Text, ElementName=TargetNameText}"
+                               FontFamily="Segoe UI Semibold"
+                               FontSize="{Binding FontSize, ElementName=TargetNameText}"
+                               FontWeight="Bold"
+                               Foreground="#FF000000"
+                               Opacity="0.82"
+                               TextAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               TextWrapping="NoWrap"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Stretch"
+                               Margin="-1,-1,1,1" />
+                    <TextBlock Text="{Binding Text, ElementName=TargetNameText}"
+                               FontFamily="Segoe UI Semibold"
+                               FontSize="{Binding FontSize, ElementName=TargetNameText}"
+                               FontWeight="Bold"
+                               Foreground="#FF000000"
+                               Opacity="0.82"
+                               TextAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               TextWrapping="NoWrap"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Stretch"
+                               Margin="1,-1,-1,1" />
+                    <TextBlock Text="{Binding Text, ElementName=TargetNameText}"
+                               FontFamily="Segoe UI Semibold"
+                               FontSize="{Binding FontSize, ElementName=TargetNameText}"
+                               FontWeight="Bold"
+                               Foreground="#FF000000"
+                               Opacity="0.82"
+                               TextAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               TextWrapping="NoWrap"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Stretch"
+                               Margin="-1,1,1,-1" />
+                    <TextBlock Text="{Binding Text, ElementName=TargetNameText}"
+                               FontFamily="Segoe UI Semibold"
+                               FontSize="{Binding FontSize, ElementName=TargetNameText}"
+                               FontWeight="Bold"
+                               Foreground="#FF000000"
+                               Opacity="0.82"
+                               TextAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               TextWrapping="NoWrap"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Stretch"
+                               Margin="1,1,-1,-1" />
+                    <TextBlock x:Name="TargetNameText"
+                               FontFamily="Segoe UI Semibold"
+                               FontSize="13"
+                               FontWeight="Bold"
+                               Foreground="#FFFFFFFF"
+                               TextAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               TextWrapping="NoWrap"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Stretch" />
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

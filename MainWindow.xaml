@@ -1,0 +1,283 @@
+<Window x:Class="ProperAppUpdater.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Süpürücü"
+        Icon="Assets/supurucu-polished.ico"
+        Width="430"
+        Height="340"
+        MinWidth="430"
+        MinHeight="340"
+        MaxWidth="430"
+        MaxHeight="340"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        ShowInTaskbar="True"
+        Background="Transparent"
+        AllowsTransparency="True"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing"
+        Closed="Window_Closed"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="36" />
+            <Setter Property="Padding" Value="14,0" />
+            <Setter Property="Background" Value="{DynamicResource ButtonBackgroundBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+
+        <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{DynamicResource PrimaryBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundBrush}" />
+        </Style>
+
+        <Style x:Key="CaptionButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Width" Value="28" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="2,0,0,0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Normal" />
+        </Style>
+    </Window.Resources>
+
+    <Border x:Name="RootShell"
+            Background="{DynamicResource WindowBackgroundBrush}"
+            BorderBrush="{DynamicResource WindowBorderBrush}"
+            BorderThickness="1"
+            CornerRadius="14"
+            Padding="14"
+            RenderTransformOrigin="0.5,0.5">
+        <Border.RenderTransform>
+            <ScaleTransform x:Name="RootScale"
+                            ScaleX="0.97"
+                            ScaleY="0.97" />
+        </Border.RenderTransform>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid MouseLeftButtonDown="Header_MouseLeftButtonDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Image Source="Assets/supurucu-polished.png"
+                       Width="42"
+                       Height="42"
+                       Margin="0,0,10,0"
+                       RenderOptions.BitmapScalingMode="HighQuality" />
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock x:Name="AppNameText"
+                               Text="Süpürücü"
+                               FontSize="20"
+                               TextTrimming="CharacterEllipsis"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource InkBrush}" />
+                    <TextBlock x:Name="StatusText"
+                               Text="Hazır."
+                               FontSize="12"
+                               Foreground="{DynamicResource MutedBrush}"
+                               TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Top">
+                    <Button x:Name="MinimizeButton"
+                            Style="{StaticResource CaptionButton}"
+                            Content="−"
+                            AutomationProperties.Name="Minimize"
+                            Click="MinimizeButton_Click" />
+                    <Button x:Name="CloseButton"
+                            Style="{StaticResource CaptionButton}"
+                            Content="×"
+                            AutomationProperties.Name="Close"
+                            Click="CloseButton_Click" />
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="0,14,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="FindButton"
+                        Content="Eskiyi bul"
+                        Click="FindButton_Click" />
+                <Button x:Name="SweepButton"
+                        Grid.Column="2"
+                        Content="Süpür!"
+                        Style="{StaticResource PrimaryButton}"
+                        Click="SweepButton_Click"
+                        IsEnabled="False" />
+            </Grid>
+
+            <Border Grid.Row="2"
+                    Background="{DynamicResource PanelBrush}"
+                    BorderBrush="{DynamicResource LineBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8">
+                <ListBox x:Name="UpdatesList"
+                         ItemsSource="{Binding Updates}"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="8,6">
+                                <Border x:Name="FamilyHeader"
+                                        Background="{DynamicResource FamilyHeaderBrush}"
+                                        BorderBrush="{DynamicResource FamilyBorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="7"
+                                        Padding="9,4"
+                                        Margin="0,0,0,5"
+                                        Visibility="Collapsed">
+                                    <TextBlock Text="{Binding FamilyTitle}"
+                                               FontSize="11"
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource FamilyForegroundBrush}"
+                                               TextTrimming="CharacterEllipsis" />
+                                </Border>
+
+                                <Border x:Name="CandidateRow"
+                                        Background="Transparent"
+                                        BorderBrush="Transparent"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Padding="7,5">
+                                    <Border.ContextMenu>
+                                        <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                                            <MenuItem Header="{Binding PirateMenuText}"
+                                                      Click="PirateCandidateMenuItem_Click" />
+                                            <Separator />
+                                            <MenuItem Header="{Binding DeleteMenuText}"
+                                                      Click="DeleteCandidateMenuItem_Click" />
+                                            <MenuItem Header="{Binding FilePathMenuText}"
+                                                      Click="FilePathCandidateMenuItem_Click" />
+                                        </ContextMenu>
+                                    </Border.ContextMenu>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="26" />
+                                                <ColumnDefinition Width="38" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                        <CheckBox VerticalAlignment="Center"
+                                                  IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"
+                                                  IsEnabled="{Binding UpdateAvailable}"
+                                                  Click="CandidateCheckBox_Click" />
+
+                                        <Border Grid.Column="1"
+                                                Width="28"
+                                                Height="28"
+                                                Background="#14000000"
+                                                BorderBrush="{DynamicResource LineBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="6"
+                                                VerticalAlignment="Center">
+                                            <Image Source="{Binding IconSource}"
+                                                   Width="20"
+                                                   Height="20"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Stretch="Uniform"
+                                                   RenderOptions.BitmapScalingMode="HighQuality" />
+                                        </Border>
+
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{DynamicResource InkBrush}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Text="{Binding VersionLine, Mode=OneWay}"
+                                                       FontSize="11"
+                                                       Foreground="{DynamicResource MutedBrush}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Text="{Binding SourceLine, Mode=OneWay}"
+                                                       FontSize="10"
+                                                       Foreground="{DynamicResource MutedBrush}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                        </StackPanel>
+
+                                        <Border Grid.Column="3"
+                                                Background="{DynamicResource BadgeBackgroundBrush}"
+                                                BorderBrush="{DynamicResource BadgeBorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="8"
+                                                Padding="8,3"
+                                                Margin="8,0,0,0"
+                                                VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Status}"
+                                                       FontSize="11"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{DynamicResource BadgeForegroundBrush}" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding ShowFamilyHeader}" Value="True">
+                                    <Setter TargetName="FamilyHeader" Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsFamilyMember}" Value="True">
+                                    <Setter TargetName="CandidateRow" Property="Background" Value="{DynamicResource FamilyBackgroundBrush}" />
+                                    <Setter TargetName="CandidateRow" Property="BorderBrush" Value="{DynamicResource FamilyBorderBrush}" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+
+            <Grid Grid.Row="3" Margin="2,7,2,0">
+                <Grid.RowDefinitions><RowDefinition Height="16"/><RowDefinition Height="26"/></Grid.RowDefinitions>
+                <TextBlock x:Name="FooterText" FontSize="10" Foreground="{DynamicResource MutedBrush}"
+                           TextTrimming="CharacterEllipsis" VerticalAlignment="Center">
+                    <TextBlock.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem x:Name="LanguageMenuItem" Click="LanguageMenuItem_Click"/>
+                            <Separator/>
+                            <MenuItem x:Name="ResetBlocksMenuItem" Click="ResetBlocksMenuItem_Click"/>
+                        </ContextMenu>
+                    </TextBlock.ContextMenu>
+                </TextBlock>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="5"/><ColumnDefinition Width="*"/><ColumnDefinition Width="5"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <Button x:Name="PirateButton" Height="26" Padding="4,0" FontSize="10" Click="PirateButton_Click"/>
+                    <Button x:Name="SelfSweepButton" Grid.Column="2" Height="26" Padding="4,0" FontSize="10" Click="SelfSweepButton_Click"/>
+                    <Button x:Name="DeleteSelfButton" Grid.Column="4" Height="26" Padding="4,0" FontSize="10" Click="DeleteSelfButton_Click"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
