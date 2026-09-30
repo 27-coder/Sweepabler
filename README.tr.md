@@ -1,4 +1,4 @@
-<p align="center"><img src="Assets/supurucu-polished.png" width="112" alt="Süpürücü logosu"></p>
+<p align="center"><img src="src/Sweepabler/Assets/supurucu-polished.png" width="112" alt="Süpürücü logosu"></p>
 <h1 align="center">Süpürücü · Sweepable’r</h1>
 <p align="center">Windows için uygulama güncelleyici. Able’r ailesinin ilk ürünü.</p>
 <p align="center">Türkçe · <a href="README.md">English</a> · <a href="https://github.com/27-coder/Sweepabler/releases/tag/v1.2.3-dev">İndir</a></p>
@@ -36,6 +36,6 @@ Daha fazla uygulama desteği, yedekleme, temizlik önizlemesi, dosya parçalama 
 
 ## Kaynak ve veriler
 
-Süpürücü WPF ve .NET 10 kullanır. Ayarlar, geçmiş ve indirilen dosyalar `%LOCALAPPDATA%\Supurucu` altında tutulur. Hesap ya da arka plan servisi yok.
+Süpürücü WPF ve .NET 10 kullanır. Uygulama kodu [src/Sweepabler](src/Sweepabler) içinde. Ayarlar, geçmiş ve indirilen dosyalar `%LOCALAPPDATA%\Supurucu` altında tutulur. Hesap ya da arka plan servisi yok.
 
 Kaynak kod [MIT lisansıyla](LICENSE) açık. Katkılara da açık.

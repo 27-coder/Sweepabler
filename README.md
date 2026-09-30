@@ -1,4 +1,4 @@
-<p align="center"><img src="Assets/supurucu-polished.png" width="112" alt="Sweepable’r logo"></p>
+<p align="center"><img src="src/Sweepabler/Assets/supurucu-polished.png" width="112" alt="Sweepable’r logo"></p>
 <h1 align="center">Sweepable’r</h1>
 <p align="center">An app updater for Windows. The first product in the Able’r family.</p>
 <p align="center">English · <a href="README.tr.md">Türkçe</a> · <a href="https://github.com/27-coder/Sweepabler/releases/tag/v1.2.3-dev">Download</a></p>
@@ -36,6 +36,6 @@ More supported apps, backups, cleanup previews, file shredding, and Windows opti
 
 ## Source and data
 
-Sweepable’r uses WPF and .NET 10. Settings, history, and cached downloads stay under `%LOCALAPPDATA%\Supurucu`. There’s no account or background service.
+Sweepable’r uses WPF and .NET 10. The app source is in [src/Sweepabler](src/Sweepabler). Settings, history, and cached downloads stay under `%LOCALAPPDATA%\Supurucu`. There’s no account or background service.
 
 The source is [MIT licensed](LICENSE). Contributions are welcome.

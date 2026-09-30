@@ -5,9 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>ProperAppUpdater.Tests</AssemblyName>
+    <RootNamespace>ProperAppUpdater.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProperAppUpdater.csproj" />
+    <ProjectReference Include="..\..\src\Sweepabler\Sweepabler.csproj" />
   </ItemGroup>
 </Project>
