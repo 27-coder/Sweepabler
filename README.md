@@ -39,3 +39,5 @@ More supported apps, backups, cleanup previews, file shredding, and Windows opti
 Sweepable’r uses WPF and .NET 10. The app source is in [src/Sweepabler](src/Sweepabler). Settings, history, and cached downloads stay under `%LOCALAPPDATA%\Supurucu`. There’s no account or background service.
 
 The source is [MIT licensed](LICENSE). Contributions are welcome.
+
+Developers: [27-coder](https://github.com/27-coder) and [umutkkgz](https://github.com/umutkkgz).

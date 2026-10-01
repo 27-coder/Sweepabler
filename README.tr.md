@@ -39,3 +39,5 @@ Daha fazla uygulama desteği, yedekleme, temizlik önizlemesi, dosya parçalama 
 Süpürücü WPF ve .NET 10 kullanır. Uygulama kodu [src/Sweepabler](src/Sweepabler) içinde. Ayarlar, geçmiş ve indirilen dosyalar `%LOCALAPPDATA%\Supurucu` altında tutulur. Hesap ya da arka plan servisi yok.
 
 Kaynak kod [MIT lisansıyla](LICENSE) açık. Katkılara da açık.
+
+Geliştiriciler: [27-coder](https://github.com/27-coder) ve [umutkkgz](https://github.com/umutkkgz).
