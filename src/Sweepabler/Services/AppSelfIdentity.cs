@@ -42,6 +42,8 @@ public static class AppSelfIdentity
         return catalog.MatchNames.Any(IsSelfText);
     }
 
+    public static bool IsSelf(string displayName) => IsSelfText(displayName);
+
     private static bool IsSelfText(string value)
     {
         var normalized = AppMatcher.Normalize(value);

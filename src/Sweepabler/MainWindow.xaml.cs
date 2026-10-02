@@ -97,18 +97,20 @@ public partial class MainWindow : Window
     private async Task FindUpdatesAsync()
     {
         var cancellationToken = StartWork(Text.Get("OldSearching"));
+        var selfCheck = Task.CompletedTask;
         try
         {
             Updates.Clear();
+            selfCheck = CheckSelfUpdateAvailabilityAsync(cancellationToken);
             await SweepUpdaterToolsAsync(cancellationToken);
 
             FooterText.Text = Text.Get("InstalledAppsChecking");
 
             var catalog = await _catalogService.LoadAsync(cancellationToken);
-            var registryApps = await Task.Run(_installedAppScanner.Scan, cancellationToken);
-            var installedApps = registryApps
-                .Concat(new[] { AppSelfIdentity.CreateInstalledApp() })
+            var registryApps = (await Task.Run(_installedAppScanner.Scan, cancellationToken))
+                .Where(app => !AppSelfIdentity.IsSelf(app.DisplayName))
                 .ToList();
+            var installedApps = registryApps;
             var ignoredNames = (await _unsupportedIgnoreService.LoadAsync(cancellationToken))
                 .Select(AppMatcher.Normalize)
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
@@ -125,7 +127,7 @@ public partial class MainWindow : Window
                 foreach (var entry in catalog)
                 {
                     var installedMatch = AppMatcher.FindInstalledMatch(entry, installedApps);
-                    if (installedMatch is null)
+                    if (installedMatch is null || AppSelfIdentity.IsSelf(entry, installedMatch.DisplayName))
                     {
                         continue;
                     }
@@ -206,6 +208,7 @@ public partial class MainWindow : Window
         }
         finally
         {
+            await selfCheck;
             EndWork();
         }
     }
@@ -604,7 +607,7 @@ public partial class MainWindow : Window
             }
 
             var candidate = CreatePackageManagerCandidate(update, installedMatch);
-            if (_failureBlockService.IsBlocked(candidate, blockedUpdateKeys))
+            if (candidate.IsSelfUpdate || _failureBlockService.IsBlocked(candidate, blockedUpdateKeys))
             {
                 continue;
             }
@@ -770,6 +773,7 @@ public partial class MainWindow : Window
         FindButton.IsEnabled = !_isBusy && !_isClosing;
         PirateButton.IsEnabled = !_isBusy && !_isClosing;
         SelfSweepButton.IsEnabled = !_isBusy && !_isClosing;
+        RefreshSelfUpdateButton();
         DeleteSelfButton.IsEnabled = !_isBusy && !_isClosing;
         LanguageMenuItem.IsEnabled = !_isBusy && !_isClosing;
         WorkspaceSwitcher.IsEnabled = !_isBusy && !_isClosing;
@@ -897,7 +901,11 @@ public partial class MainWindow : Window
         {
             var update = await new SelfMaintenanceService(_httpClient).PrepareUpdateAsync(App.Settings.UpdateRepository,
                 new Progress<string>(message => SetStatus(message)), cancellationToken);
-            if (update is null) SetStatus(Text.Get("SelfCurrent"));
+            if (update is null)
+            {
+                SetSelfUpdateAvailable(false);
+                SetStatus(Text.Get("SelfCurrent"));
+            }
             else
             {
                 cancellationToken.ThrowIfCancellationRequested();

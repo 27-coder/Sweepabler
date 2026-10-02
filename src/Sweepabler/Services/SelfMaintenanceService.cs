@@ -6,21 +6,33 @@ using ProperAppUpdater.Models;
 
 namespace ProperAppUpdater.Services;
 
-internal sealed partial class SelfMaintenanceService(HttpClient httpClient)
+internal sealed partial class SelfMaintenanceService(HttpClient httpClient, string? cacheRoot = null)
 {
-    public async Task<SelfUpdateDownload?> PrepareUpdateAsync(string repository, IProgress<string> progress, CancellationToken cancellationToken)
+    public async Task<ReleaseInfo?> CheckForUpdateAsync(string repository, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         var catalog = CreateCatalog(repository);
-        var release = await new GitHubReleaseProvider(httpClient, refreshCache: true).GetLatestAsync(catalog, cancellationToken);
-        var current = typeof(App).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "1.0.0";
-        if (VersionComparer.Compare(current, release.Version) >= 0) return null;
+        var release = await new GitHubReleaseProvider(httpClient, cacheRoot, refreshCache: true).GetLatestAsync(catalog, cancellationToken);
+        cancellationToken.ThrowIfCancellationRequested();
+        if (VersionComparer.Compare(CurrentVersion, release.Version) >= 0) return null;
         if (!Sha256().IsMatch(release.Sha256) || !release.AssetName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
             throw new InvalidOperationException(LocalizationService.Current.Get("SelfUnverified"));
+        return release;
+    }
+
+    private static string CurrentVersion =>
+        typeof(App).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "1.0.0";
+
+    public async Task<SelfUpdateDownload?> PrepareUpdateAsync(string repository, IProgress<string> progress, CancellationToken cancellationToken)
+    {
+        var release = await CheckForUpdateAsync(repository, cancellationToken);
+        if (release is null) return null;
+        var catalog = CreateCatalog(repository);
 
         var record = await new UpdateExecutor(httpClient).PrepareAsync(catalog, new UpdateRecord
         {
             AppName = LocalizationService.Current.AppName,
-            FromVersion = current,
+            FromVersion = CurrentVersion,
             ToVersion = release.Version,
             DownloadUrl = release.DownloadUrl,
             SourceName = release.SourceName,

@@ -25,6 +25,7 @@
         UseLayoutRounding="True"
         SnapsToDevicePixels="True">
     <Window.Resources>
+        <SolidColorBrush x:Key="SelfUpdateAvailableBrush" Color="#6FA982" />
         <Style TargetType="Button">
             <Setter Property="Height" Value="36" />
             <Setter Property="Padding" Value="14,0" />

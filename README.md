@@ -1,7 +1,7 @@
 <p align="center"><img src="src/Sweepabler/Assets/supurucu-polished.png" width="112" alt="Sweepable’r logo"></p>
 <h1 align="center">Sweepable’r</h1>
 <p align="center">An app updater for Windows. The first product in the Able’r family.</p>
-<p align="center">English · <a href="README.tr.md">Türkçe</a> · <a href="https://github.com/27-coder/Sweepabler/releases/tag/v1.2.4">Download</a></p>
+<p align="center">English · <a href="README.tr.md">Türkçe</a> · <a href="https://github.com/27-coder/Sweepabler/releases/tag/v1.2.5">Download</a></p>
 
 Most of us started on Windows. Over the years, we built a setup around it: work, games, tools, and all the little things we’re used to. Switching to Linux or macOS sounds appealing, but taking that whole setup with us is a lot of work.
 
@@ -22,15 +22,15 @@ Click the small red wardrobe in the top-right corner to cycle through **Update �
 
 ## Running it
 
-Download the [Windows x64 ZIP](https://github.com/27-coder/Sweepabler/releases/download/v1.2.4/Sweepabler-1.2.4-windows-x64.zip), extract it, and open `Süpürücü.exe`.
+Download the [Windows x64 ZIP](https://github.com/27-coder/Sweepabler/releases/download/v1.2.5/Sweepabler-1.2.5-windows-x64.zip), extract it, and open `Süpürücü.exe`.
 
 On the first run, choose **Turkish** or **English**. Setup installs any missing WinGet, Git, Chocolatey, and Scoop tools, checks them, then opens the app. You can change the language later from the footer’s **Language** menu.
 
 Press **Detect geezer's** to scan, pick the apps you want, then press **Sweep!**. If an app is open, Sweepable’r asks before force-closing it. Save your work before agreeing. Discord is excluded because of its update and relaunch behavior.
 
-**Sweep the Sweepable’r** checks this repo for a newer EXE, including development releases. It verifies the download, closes the app, replaces the current copy, and opens it again. **Delete Sweepable’r** asks for confirmation and removes that portable EXE; your saved data and installed tools stay.
+**Detect geezer's** also checks this repo for a Sweepable’r update, including development releases. Sweepable’r stays out of the normal app list; the **Sweep the Sweepable’r** text turns green when a verified newer release is available. Clicking that button verifies the download, closes the app, replaces the current copy, and opens it again. **Delete Sweepable’r** asks for confirmation and removes that portable EXE; your saved data and installed tools stay.
 
-The current release is **1.2.4**. The app is still in development and the EXE is unsigned, so Windows may show a warning when you open it.
+The current release is **1.2.5**. The app is still in development and the EXE is unsigned, so Windows may show a warning when you open it.
 
 ## What’s next
 

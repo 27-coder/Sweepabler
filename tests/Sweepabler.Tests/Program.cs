@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using ProperAppUpdater.Models;
@@ -58,7 +59,11 @@ internal static class Program
             ("Python variants group without losing individual identities", AppFamilyTests.PythonVariantsAsync),
             ("Family headers refresh after updates and removals", AppFamilyTests.HeaderAfterRemovalAsync),
             ("Self-update finds verified development EXEs with legacy settings", SelfUpdateTests.DefaultChannelAsync),
-            ("Explicit self-update checks see fresh releases despite cached metadata", SelfUpdateTests.FreshClickAsync)
+            ("Explicit self-update checks see fresh releases despite cached metadata", SelfUpdateTests.FreshClickAsync),
+            ("Self-update detection checks versions without downloading an installer", TestSelfUpdateDetectionAsync),
+            ("Unverified newer self-updates cannot signal availability", TestSelfUpdateUnverifiedAsync),
+            ("Every self-update detection checks fresh release metadata", TestSelfUpdateDetectionFreshnessAsync),
+            ("Cancelled self-update detection propagates cancellation", TestSelfUpdateDetectionCancellationAsync)
         };
 
         var failed = 0;
@@ -666,11 +671,156 @@ internal static class Program
         return Task.CompletedTask;
     }
 
+    private static async Task TestSelfUpdateDetectionAsync()
+    {
+        var cacheRoot = Path.Combine(Path.GetTempPath(), "SupurucuTests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(cacheRoot);
+        try
+        {
+            using var handler = new SelfUpdateMetadataHandler();
+            using var client = new HttpClient(handler);
+            var service = new SelfMaintenanceService(client, cacheRoot);
+            var current = typeof(App).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+                ?? throw new InvalidOperationException("the app build did not expose its current version");
+            foreach (var version in new[] { "99.0.0", VersionComparer.CleanVersion(current), "0.1.0" })
+            {
+                handler.Version = version;
+                var release = await service.CheckForUpdateAsync(AppSettings.DefaultUpdateRepository, CancellationToken.None);
+                var expected = VersionComparer.Compare(current, version) < 0;
+                Assert((release is not null) == expected, $"wrong self-update availability for {current} -> {version}");
+                if (release is not null)
+                {
+                    Assert(release.Version == version && release.AssetName == "Supurucu.exe" && release.Sha256 == new string('A', 64),
+                        "self-update detection lost the verified release identity");
+                }
+            }
+            Assert(handler.RequestCount == 3, "self-update detection did not fetch release metadata once per check");
+            Assert(Directory.EnumerateFiles(cacheRoot).All(path => Path.GetExtension(path) == ".json"),
+                "metadata-only self-update detection wrote an installer");
+        }
+        finally { Directory.Delete(cacheRoot, recursive: true); }
+    }
+
+    private static async Task TestSelfUpdateUnverifiedAsync()
+    {
+        var cacheRoot = Path.Combine(Path.GetTempPath(), "SupurucuTests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(cacheRoot);
+        try
+        {
+            using var handler = new SelfUpdateMetadataHandler { Version = "99.0.0" };
+            using var client = new HttpClient(handler);
+            var service = new SelfMaintenanceService(client, cacheRoot);
+            foreach (var digest in new[] { "", "sha256:" + new string('A', 63), "sha256:" + new string('Z', 64) })
+            {
+                handler.Digest = digest;
+                try
+                {
+                    await service.CheckForUpdateAsync(AppSettings.DefaultUpdateRepository, CancellationToken.None);
+                    throw new InvalidOperationException("an unverified newer self-update signalled availability");
+                }
+                catch (InvalidOperationException exception) when (exception.Message == LocalizationService.Current.Get("SelfUnverified"))
+                {
+                }
+            }
+            Assert(handler.RequestCount == 3, "unverified release checks made unexpected installer requests");
+        }
+        finally { Directory.Delete(cacheRoot, recursive: true); }
+    }
+
+    private static async Task TestSelfUpdateDetectionFreshnessAsync()
+    {
+        var cacheRoot = Path.Combine(Path.GetTempPath(), "SupurucuTests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(cacheRoot);
+        try
+        {
+            using var handler = new SelfUpdateMetadataHandler { Version = "0.1.0" };
+            using var client = new HttpClient(handler);
+            var service = new SelfMaintenanceService(client, cacheRoot);
+            Assert(await service.CheckForUpdateAsync(AppSettings.DefaultUpdateRepository, CancellationToken.None) is null,
+                "an older build was offered as a self-update");
+            handler.Version = "99.0.0";
+            Assert(await service.CheckForUpdateAsync(AppSettings.DefaultUpdateRepository, CancellationToken.None) is not null,
+                "a newly published self-update was hidden behind the fresh cache");
+            handler.Version = "0.1.0";
+            Assert(await service.CheckForUpdateAsync(AppSettings.DefaultUpdateRepository, CancellationToken.None) is null,
+                "the check retained a withdrawn update from cached metadata");
+            Assert(handler.RequestCount == 3, "explicit self-update detection reused the 30-minute cache");
+        }
+        finally { Directory.Delete(cacheRoot, recursive: true); }
+    }
+
+    private static async Task TestSelfUpdateDetectionCancellationAsync()
+    {
+        var cacheRoot = Path.Combine(Path.GetTempPath(), "SupurucuTests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(cacheRoot);
+        try
+        {
+            using var handler = new SelfUpdateMetadataHandler { Stall = true };
+            using var client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(10) };
+            using var cancellation = new CancellationTokenSource();
+            var check = new SelfMaintenanceService(client, cacheRoot).CheckForUpdateAsync(AppSettings.DefaultUpdateRepository, cancellation.Token);
+            await handler.RequestStarted.Task.WaitAsync(TimeSpan.FromSeconds(5));
+            cancellation.Cancel();
+            try
+            {
+                await check;
+                throw new InvalidOperationException("cancelled self-update detection unexpectedly completed");
+            }
+            catch (OperationCanceledException) when (cancellation.IsCancellationRequested)
+            {
+            }
+            Assert(handler.RequestCount == 1, "cancellation started a later self-update request");
+        }
+        finally { Directory.Delete(cacheRoot, recursive: true); }
+    }
+
     private static void Assert(bool condition, string message)
     {
         if (!condition)
         {
             throw new InvalidOperationException(message);
+        }
+    }
+
+    private sealed class SelfUpdateMetadataHandler : HttpMessageHandler
+    {
+        public string Version { get; set; } = "99.0.0";
+        public string Digest { get; set; } = "sha256:" + new string('A', 64);
+        public bool Stall { get; init; }
+        public int RequestCount { get; private set; }
+        public TaskCompletionSource RequestStarted { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            Assert(request.Method == HttpMethod.Get && request.RequestUri?.Host == "api.github.com" &&
+                   request.RequestUri.PathAndQuery == "/repos/27-coder/Sweepabler/releases?per_page=30",
+                "self-update detection requested installer bytes or an unexpected release channel");
+            RequestCount++;
+            RequestStarted.TrySetResult();
+            if (Stall) await Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken);
+            var body = JsonSerializer.Serialize(new[]
+            {
+                new
+                {
+                    tag_name = "v" + Version,
+                    draft = false,
+                    prerelease = false,
+                    assets = new[]
+                    {
+                        new
+                        {
+                            name = "Supurucu.exe",
+                            browser_download_url = "https://github.com/27-coder/Sweepabler/releases/download/v" + Version + "/Supurucu.exe",
+                            digest = Digest
+                        }
+                    }
+                }
+            });
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(body, Encoding.UTF8, "application/json"),
+                RequestMessage = request
+            };
         }
     }
 
