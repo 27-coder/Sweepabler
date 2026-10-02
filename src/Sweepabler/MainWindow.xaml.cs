@@ -89,16 +89,6 @@ public partial class MainWindow : Window
         }
     }
 
-    private void MinimizeButton_Click(object sender, RoutedEventArgs e)
-    {
-        WindowState = WindowState.Minimized;
-    }
-
-    private void CloseButton_Click(object sender, RoutedEventArgs e)
-    {
-        Close();
-    }
-
     private void CandidateCheckBox_Click(object sender, RoutedEventArgs e)
     {
         UpdateButtons();
@@ -782,6 +772,7 @@ public partial class MainWindow : Window
         SelfSweepButton.IsEnabled = !_isBusy && !_isClosing;
         DeleteSelfButton.IsEnabled = !_isBusy && !_isClosing;
         LanguageMenuItem.IsEnabled = !_isBusy && !_isClosing;
+        WorkspaceSwitcher.IsEnabled = !_isBusy && !_isClosing;
         SweepButton.IsEnabled = !_isBusy && !_isClosing && Updates.Any(candidate => candidate.IsSelected && candidate.UpdateAvailable);
     }
 
@@ -868,11 +859,10 @@ public partial class MainWindow : Window
         DeleteSelfButton.Content = Text.Get("DeleteSelfButton");
         ResetBlocksMenuItem.Header = Text.Get("ResetBlocksMenu");
         LanguageMenuItem.Header = Text.Get("LanguageMenu");
-        System.Windows.Automation.AutomationProperties.SetName(MinimizeButton, Text.Get("Minimize"));
-        System.Windows.Automation.AutomationProperties.SetName(CloseButton, Text.Get("Close"));
         StatusText.Text = Text.Get("ReadyStatus");
         foreach (var candidate in Updates) candidate.RefreshLocalization();
         FooterText.Text = Text.Get("ReadyFooter");
+        RefreshDeckLocalization();
     }
 
     private async void LanguageMenuItem_Click(object sender, RoutedEventArgs e)

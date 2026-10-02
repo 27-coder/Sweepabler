@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:ProperAppUpdater.Controls"
         mc:Ignorable="d"
         Title="Süpürücü"
         Icon="Assets/supurucu-polished.ico"
@@ -40,15 +41,25 @@
             <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundBrush}" />
         </Style>
 
-        <Style x:Key="CaptionButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-            <Setter Property="Width" Value="28" />
-            <Setter Property="Height" Value="28" />
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="Margin" Value="2,0,0,0" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="FontWeight" Value="Normal" />
+        <Style x:Key="PreviewButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="IsEnabled" Value="False" />
+            <Setter Property="Opacity" Value="0.65" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1" CornerRadius="2" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="PreviewPrimaryButton" TargetType="Button" BasedOn="{StaticResource PreviewButton}">
+            <Setter Property="Background" Value="{DynamicResource PrimaryBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundBrush}" />
         </Style>
     </Window.Resources>
 
@@ -72,50 +83,44 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Grid MouseLeftButtonDown="Header_MouseLeftButtonDown">
+            <Grid x:Name="HeaderRow" Height="42">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="38" />
                 </Grid.ColumnDefinitions>
-
-                <Image Source="Assets/supurucu-polished.png"
-                       Width="42"
-                       Height="42"
-                       Margin="0,0,10,0"
-                       RenderOptions.BitmapScalingMode="HighQuality" />
-
-                <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                    <TextBlock x:Name="AppNameText"
-                               Text="Süpürücü"
-                               FontSize="20"
-                               TextTrimming="CharacterEllipsis"
-                               FontWeight="SemiBold"
-                               Foreground="{DynamicResource InkBrush}" />
-                    <TextBlock x:Name="StatusText"
-                               Text="Hazır."
-                               FontSize="12"
-                               Foreground="{DynamicResource MutedBrush}"
-                               TextTrimming="CharacterEllipsis" />
-                </StackPanel>
-
-                <StackPanel Grid.Column="2"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Top">
-                    <Button x:Name="MinimizeButton"
-                            Style="{StaticResource CaptionButton}"
-                            Content="−"
-                            AutomationProperties.Name="Minimize"
-                            Click="MinimizeButton_Click" />
-                    <Button x:Name="CloseButton"
-                            Style="{StaticResource CaptionButton}"
-                            Content="×"
-                            AutomationProperties.Name="Close"
-                            Click="CloseButton_Click" />
-                </StackPanel>
+                <Grid Background="Transparent" Margin="0,0,14,0"
+                      MouseLeftButtonDown="Header_MouseLeftButtonDown">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="42" />
+                        <ColumnDefinition Width="12" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Image x:Name="BrandLogo" Source="Assets/supurucu-polished.png"
+                           Width="42" Height="42" VerticalAlignment="Center"
+                           RenderOptions.BitmapScalingMode="HighQuality" />
+                    <StackPanel x:Name="HeaderText" Grid.Column="2" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="AppNameText" Text="Süpürücü" FontSize="20"
+                                       FontWeight="SemiBold" Foreground="{DynamicResource InkBrush}" />
+                            <TextBlock x:Name="ModeTitleText" FontSize="12" FontWeight="SemiBold"
+                                       VerticalAlignment="Bottom" Margin="9,0,0,3"
+                                       Foreground="{DynamicResource AccentForegroundBrush}" />
+                        </StackPanel>
+                        <Grid Margin="0,1,0,0">
+                            <TextBlock x:Name="StatusText" Text="Hazır." FontSize="11"
+                                       Foreground="{DynamicResource MutedBrush}" TextTrimming="CharacterEllipsis" />
+                            <TextBlock x:Name="DeckStatusText" FontSize="11"
+                                       Foreground="{DynamicResource MutedBrush}" TextTrimming="CharacterEllipsis"
+                                       Visibility="Collapsed" />
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+                <controls:DeckSwitcher x:Name="WorkspaceSwitcher" Grid.Column="1"
+                                       HorizontalAlignment="Right" VerticalAlignment="Center"
+                                       SelectedDeckChanged="WorkspaceSwitcher_SelectedDeckChanged" />
             </Grid>
 
-            <Grid Grid.Row="1" Margin="0,14,0,10">
+            <Grid x:Name="UpdateActions" Grid.Row="1" Margin="0,12,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="10" />
@@ -133,14 +138,24 @@
                         IsEnabled="False" />
             </Grid>
 
-            <Border Grid.Row="2"
+            <Grid x:Name="PreviewActions" Grid.Row="1" Margin="0,12,0,10" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button x:Name="PreviewFindButton" Style="{StaticResource PreviewButton}" />
+                <Button x:Name="PreviewSweepButton" Grid.Column="2" Style="{StaticResource PreviewPrimaryButton}" />
+            </Grid>
+
+            <Border x:Name="UpdatePage" Grid.Row="2"
                     Background="{DynamicResource PanelBrush}"
                     BorderBrush="{DynamicResource LineBrush}"
                     BorderThickness="1"
                     CornerRadius="8">
                 <ListBox x:Name="UpdatesList"
                          ItemsSource="{Binding Updates}"
-                         BorderThickness="0"
+                         BorderThickness="0" Padding="0"
                          Background="Transparent"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemContainerStyle>
@@ -151,7 +166,7 @@
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="8,6">
+                            <StackPanel Margin="12,10">
                                 <Border x:Name="FamilyHeader"
                                         Background="{DynamicResource FamilyHeaderBrush}"
                                         BorderBrush="{DynamicResource FamilyBorderBrush}"
@@ -172,7 +187,7 @@
                                         BorderBrush="Transparent"
                                         BorderThickness="1"
                                         CornerRadius="8"
-                                        Padding="7,5">
+                                        Padding="0,4">
                                     <Border.ContextMenu>
                                         <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
                                             <MenuItem Header="{Binding PirateMenuText}"
@@ -259,8 +274,25 @@
                 </ListBox>
             </Border>
 
-            <Grid Grid.Row="3" Margin="2,7,2,0">
-                <Grid.RowDefinitions><RowDefinition Height="16"/><RowDefinition Height="26"/></Grid.RowDefinitions>
+            <Border x:Name="DevelopmentPage" Grid.Row="2" Visibility="Collapsed"
+                    Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource LineBrush}"
+                    BorderThickness="1" CornerRadius="8" Padding="12,10">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <TextBlock x:Name="DevelopmentBadgeText" FontSize="9" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource AccentForegroundBrush}" Margin="0,0,0,3" />
+                        <TextBlock x:Name="DeckTitleText" FontSize="15" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource InkBrush}" TextWrapping="Wrap" />
+                        <TextBlock x:Name="DeckDescriptionText" FontSize="11" LineHeight="15"
+                                   Foreground="{DynamicResource MutedBrush}" TextWrapping="Wrap" Margin="0,5,0,6" />
+                        <TextBlock x:Name="PlannedFeaturesText" FontSize="11" LineHeight="17"
+                                   Foreground="{DynamicResource InkBrush}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <Grid x:Name="FooterRow" Grid.Row="3" Margin="0,8,0,0">
+                <Grid.RowDefinitions><RowDefinition Height="16"/><RowDefinition Height="3"/><RowDefinition Height="26"/></Grid.RowDefinitions>
                 <TextBlock x:Name="FooterText" FontSize="10" Foreground="{DynamicResource MutedBrush}"
                            TextTrimming="CharacterEllipsis" VerticalAlignment="Center">
                     <TextBlock.ContextMenu>
@@ -271,7 +303,11 @@
                         </ContextMenu>
                     </TextBlock.ContextMenu>
                 </TextBlock>
-                <Grid Grid.Row="1">
+                <TextBlock x:Name="DevelopmentFooterText" FontSize="10"
+                           Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis" Visibility="Collapsed"
+                           ContextMenu="{Binding ContextMenu, ElementName=FooterText}" />
+                <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="5"/><ColumnDefinition Width="*"/><ColumnDefinition Width="5"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                     <Button x:Name="PirateButton" Height="26" Padding="4,0" FontSize="10" Click="PirateButton_Click"/>
                     <Button x:Name="SelfSweepButton" Grid.Column="2" Height="26" Padding="4,0" FontSize="10" Click="SelfSweepButton_Click"/>

@@ -1,0 +1,50 @@
+<UserControl x:Class="ProperAppUpdater.Controls.DeckSwitcher"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Width="38" Height="28"
+             PreviewKeyDown="Switcher_PreviewKeyDown"
+             AutomationProperties.Name="Workspace">
+    <Button x:Name="CycleButton" Width="38" Height="28" Padding="0"
+            Background="Transparent" BorderBrush="Transparent" Cursor="Hand"
+            FocusVisualStyle="{x:Null}" Click="CycleButton_Click"
+            MouseEnter="CycleButton_MouseEnter" MouseLeave="CycleButton_MouseLeave">
+        <Button.Template>
+            <ControlTemplate TargetType="Button">
+                <Border Background="Transparent" BorderThickness="0">
+                    <ContentPresenter />
+                </Border>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Opacity" Value="0.45" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </Button.Template>
+        <Viewbox Stretch="Uniform" ClipToBounds="True" IsHitTestVisible="False">
+            <!-- The entire little wardrobe is one next-page button. -->
+            <Canvas x:Name="PanelDrawing" Width="128" Height="96" RenderTransformOrigin="0.5,0.5">
+                <Canvas.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform x:Name="CabinetHover" CenterX="64" CenterY="48" />
+                        <TranslateTransform x:Name="CabinetSwipe" />
+                    </TransformGroup>
+                </Canvas.RenderTransform>
+                <Ellipse Canvas.Left="18" Canvas.Top="86" Width="92" Height="7" Fill="#33000000" />
+                <Path x:Name="UpdateFace" StrokeLineJoin="Round" />
+                <Path x:Name="DeleteFace" StrokeLineJoin="Round" />
+                <Path x:Name="PatchFace" StrokeLineJoin="Round" />
+                <Path x:Name="BackupFace" StrokeLineJoin="Round" />
+                <TextBlock x:Name="UpdateLetter" Text="U" FontSize="32" FontWeight="SemiBold"
+                           Width="32" Height="40" TextAlignment="Center" />
+                <TextBlock x:Name="DeleteLetter" Text="D" FontSize="32" FontWeight="SemiBold"
+                           Width="32" Height="40" TextAlignment="Center" />
+                <TextBlock x:Name="PatchLetter" Text="P" FontSize="32" FontWeight="SemiBold"
+                           Width="32" Height="40" TextAlignment="Center" />
+                <TextBlock x:Name="BackupLetter" Text="B" FontSize="32" FontWeight="SemiBold"
+                           Width="32" Height="40" TextAlignment="Center" />
+                <Path Data="M 64,19 L 64,76" Stroke="#A8565C" StrokeThickness="1.2"
+                      Panel.ZIndex="1000" />
+            </Canvas>
+        </Viewbox>
+    </Button>
+</UserControl>
